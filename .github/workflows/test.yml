@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  schedule:
+    # Runs once per year on March 16 at 00:00 UTC
+    - cron: "0 0 16 3 *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: gh-release
+      cancel-in-progress: false
+    steps:
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2.6.0
+        with:
+          generate_release_notes: true
